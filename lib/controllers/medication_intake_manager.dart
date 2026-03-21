@@ -1,23 +1,23 @@
 import 'package:decimal/decimal.dart';
-import 'package:mona/controllers/supply_item_manager.dart';
+import 'package:mona/controllers/medication_supply_manager.dart';
 import 'package:mona/data/model/medication_schedule.dart';
-import 'package:mona/data/model/supply_item.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import '../data/model/medication_intake.dart';
 import '../data/providers/medication_intake_provider.dart';
 
 class MedicationIntakeManager {
   final MedicationIntakeProvider _medicationIntakeProvider;
-  final SupplyItemProvider _supplyItemProvider;
+  final MedicationSupplyProvider _medicationSupplyProvider;
 
   MedicationIntakeManager(
-      this._medicationIntakeProvider, this._supplyItemProvider);
+      this._medicationIntakeProvider, this._medicationSupplyProvider);
 
   Future<void> takeMedication({
     required Decimal dose,
     required DateTime scheduledDate,
     required DateTime takenDate,
-    SupplyItem? supplyItem,
+    MedicationSupply? medicationSupply,
     required MedicationSchedule schedule,
     InjectionSide? side,
     Decimal? deadSpace, //in μL
@@ -33,13 +33,13 @@ class MedicationIntakeManager {
       ester: schedule.ester,
     ));
 
-    if (supplyItem != null) {
+    if (medicationSupply != null) {
       if (deadSpace != null && deadSpace > Decimal.zero) {
         final deadSpaceMl = deadSpace * Decimal.parse('0.001');
-        dose += supplyItem.getDose(deadSpaceMl);
+        dose += medicationSupply.getDose(deadSpaceMl);
       }
 
-      await SupplyItemManager(_supplyItemProvider).useDose(supplyItem, dose);
+      await MedicationSupplyManager(_medicationSupplyProvider).useDose(medicationSupply, dose);
     }
   }
 

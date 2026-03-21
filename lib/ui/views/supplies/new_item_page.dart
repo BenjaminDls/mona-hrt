@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/ester.dart';
 import 'package:mona/data/model/molecule.dart';
-import 'package:mona/data/model/supply_item.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/services/preferences_service.dart';
 import 'package:mona/ui/widgets/forms/form_dropdown_field.dart';
 import 'package:mona/ui/widgets/forms/form_spacer.dart';
@@ -26,17 +26,17 @@ class _NewItemPageState extends State<NewItemPage> {
   Ester? _ester;
   late PreferencesService _preferencesService;
 
-  String? get _nameError => SupplyItem.validateName(_nameController.text);
+  String? get _nameError => MedicationSupply.validateName(_nameController.text);
   String? get _totalAmountError =>
-      SupplyItem.validateTotalAmount(_totalAmountController.text);
+      MedicationSupply.validateTotalAmount(_totalAmountController.text);
   String? get _concentrationError =>
-      SupplyItem.validateConcentration(_concentrationController.text);
-  String? get _moleculeError => SupplyItem.validateMolecule(_molecule);
+      MedicationSupply.validateConcentration(_concentrationController.text);
+  String? get _moleculeError => MedicationSupply.validateMolecule(_molecule);
   String? get _administrationRouteError =>
-      SupplyItem.validateAdministrationRoute(_administrationRoute);
+      MedicationSupply.validateAdministrationRoute(_administrationRoute);
   String? get _esterError {
     final validator =
-        SupplyItem.esterValidator(_molecule, _administrationRoute);
+        MedicationSupply.esterValidator(_molecule, _administrationRoute);
     return validator(_ester);
   }
 
@@ -93,10 +93,10 @@ class _NewItemPageState extends State<NewItemPage> {
     final concentration = parseDecimal(_concentrationController.text);
     final totalDose = concentration * totalAmount;
     final name = _nameController.text;
-    final supplyItemProvider =
-        Provider.of<SupplyItemProvider>(context, listen: false);
+    final medicationSupplyProvider =
+        Provider.of<MedicationSupplyProvider>(context, listen: false);
 
-    final item = SupplyItem(
+    final item = MedicationSupply(
       name: name,
       totalDose: totalDose,
       concentration: concentration,
@@ -104,7 +104,7 @@ class _NewItemPageState extends State<NewItemPage> {
       administrationRoute: _administrationRoute!,
       ester: _ester,
     );
-    supplyItemProvider.add(item);
+    medicationSupplyProvider.add(item);
 
     Navigator.pop(context);
   }

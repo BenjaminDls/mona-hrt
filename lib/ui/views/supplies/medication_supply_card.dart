@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mona/data/model/administration_route.dart';
-import 'package:mona/data/model/supply_item.dart';
+import 'package:mona/data/model/medication_supply.dart';
 import 'package:mona/ui/views/supplies/edit_item_page.dart';
 
-class SupplyItemCard extends StatelessWidget {
-  final SupplyItem item;
+class MedicationSupplyCard extends StatelessWidget {
+  final MedicationSupply item;
 
-  const SupplyItemCard({super.key, required this.item});
+  const MedicationSupplyCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

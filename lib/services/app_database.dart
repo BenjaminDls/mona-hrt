@@ -53,7 +53,7 @@ class AppDatabase {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE supply_items(
+    CREATE TABLE medication_supplies(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       totalDose TEXT NOT NULL,
       usedDose TEXT NOT NULL,
@@ -215,6 +215,8 @@ class AppDatabase {
         remainingQuantity INTEGER NOT NULL
       )
       ''');
+
+      await db.execute('ALTER TABLE supply_items RENAME TO medication_supplies');
     }
   }
 

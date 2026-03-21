@@ -1,13 +1,10 @@
-import 'package:decimal/decimal.dart';
 import '../data/model/administration_supply.dart';
-import '../data/model/supply_item.dart';
 import '../data/providers/administration_supply_provider.dart';
-import '../data/providers/supply_item_provider.dart';
 
 class AdministrationSupplyManager {
-  final AdministrationSupplyProvider _supplyItemProvider;
+  final AdministrationSupplyProvider _medicationSupplyProvider;
 
-  AdministrationSupplyManager(this._supplyItemProvider);
+  AdministrationSupplyManager(this._medicationSupplyProvider);
 
   /// Uses a portion of the amount of the [AdministrationSupply] and updates the database.
   Future<void> use(AdministrationSupply item, int amount) async {
@@ -20,7 +17,7 @@ class AdministrationSupplyManager {
       amount = item.remainingQuantity;
     }
 
-    await _supplyItemProvider.update(item.copyWith(
+    await _medicationSupplyProvider.update(item.copyWith(
       remainingQuantity: amount,
     ));
   }

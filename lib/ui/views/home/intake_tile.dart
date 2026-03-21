@@ -6,7 +6,7 @@ import 'package:mona/controllers/schedule_manager.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/medication_schedule.dart';
 import 'package:mona/data/providers/medication_intake_provider.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/ui/views/home/take_medication_page.dart';
 import 'package:mona/util/date_helpers.dart';
 import 'package:provider/provider.dart';
@@ -25,14 +25,14 @@ class IntakeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final medicationIntakeProvider = context.watch<MedicationIntakeProvider>();
-    final supplyItemProvider = context.watch<SupplyItemProvider>();
+    final medicationSupplyProvider = context.watch<MedicationSupplyProvider>();
     final now = DateTime.now();
 
     final viewModel = IntakeTileViewModel(
       schedule: schedule,
       status: status,
       intakeProvider: medicationIntakeProvider,
-      supplyProvider: supplyItemProvider,
+      supplyProvider: medicationSupplyProvider,
       now: now,
       theme: Theme.of(context),
     );
@@ -115,7 +115,7 @@ class IntakeTileViewModel {
   final MedicationSchedule schedule;
   final ScheduleStatus status;
   final MedicationIntakeProvider intakeProvider;
-  final SupplyItemProvider supplyProvider;
+  final MedicationSupplyProvider supplyProvider;
   final DateTime now;
   final ThemeData theme;
 

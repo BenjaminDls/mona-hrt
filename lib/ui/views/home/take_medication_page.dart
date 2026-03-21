@@ -4,9 +4,9 @@ import 'package:mona/controllers/medication_intake_manager.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/medication_intake.dart';
 import 'package:mona/data/model/medication_schedule.dart';
-import 'package:mona/data/model/supply_item.dart';
+import 'package:mona/data/model/medication_supply.dart';
 import 'package:mona/data/providers/medication_intake_provider.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/ui/widgets/forms/form_date_field.dart';
 import 'package:mona/ui/widgets/forms/form_dropdown_field.dart';
 import 'package:mona/ui/widgets/forms/form_spacer.dart';
@@ -31,8 +31,8 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
   late Decimal _takenDose;
   InjectionSide? _selectedSide;
   bool _hasInitializedSide = false;
-  SupplyItem? _selectedSupplyItem;
-  bool _hasInitializedSupplyItem = false;
+  MedicationSupply? _selectedMedicationSupply;
+  bool _hasInitializedMedicationSupply = false;
   late TextEditingController _deadSpaceController;
   Decimal? _deadSpace;
 
@@ -47,16 +47,16 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
       widget.schedule.administrationRoute == AdministrationRoute.injection;
 
   void _takeIntake(MedicationIntakeProvider medicationIntakeProvider,
-      SupplyItemProvider supplyItemProvider) {
+      MedicationSupplyProvider medicationSupplyProvider) {
     if (!_isFormValid) return;
     if (!mounted) return;
 
-    MedicationIntakeManager(medicationIntakeProvider, supplyItemProvider)
+    MedicationIntakeManager(medicationIntakeProvider, medicationSupplyProvider)
         .takeMedication(
       dose: _takenDose,
       scheduledDate: widget.scheduledDate,
       takenDate: _takenDate,
-      supplyItem: _selectedSupplyItem,
+      medicationSupply: _selectedMedicationSupply,
       schedule: widget.schedule,
       side: _selectedSide,
       deadSpace: _deadSpace,
@@ -102,9 +102,9 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
     }
   }
 
-  void _onSupplyItemChanged(SupplyItem? item) {
+  void _onMedicationSupplyChanged(MedicationSupply? item) {
     setState(() {
-      _selectedSupplyItem = item;
+      _selectedMedicationSupply = item;
     });
   }
 
@@ -127,40 +127,40 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<MedicationIntakeProvider, SupplyItemProvider>(
-      builder: (context, medicationIntakeProvider, supplyItemProvider, child) {
+    return Consumer2<MedicationIntakeProvider, MedicationSupplyProvider>(
+      builder: (context, medicationIntakeProvider, medicationSupplyProvider, child) {
         final bool isLoading =
-            medicationIntakeProvider.isLoading || supplyItemProvider.isLoading;
+            medicationIntakeProvider.isLoading || medicationSupplyProvider.isLoading;
 
         if (!isLoading && !_hasInitializedSide && _isInjection) {
           _selectedSide = MedicationIntakeManager(
             medicationIntakeProvider,
-            supplyItemProvider,
+            medicationSupplyProvider,
           ).getNextSide();
           _hasInitializedSide = true;
         }
 
-        if (!isLoading && !_hasInitializedSupplyItem) {
-          _selectedSupplyItem = supplyItemProvider.getMostUsedItemForMedication(
+        if (!isLoading && !_hasInitializedMedicationSupply) {
+          _selectedMedicationSupply = medicationSupplyProvider.getMostUsedItemForMedication(
             widget.schedule.molecule,
             widget.schedule.administrationRoute,
             widget.schedule.ester,
           );
-          _hasInitializedSupplyItem = true;
+          _hasInitializedMedicationSupply = true;
         }
 
-        final supplyItemOptions = supplyItemProvider.getItemsForMedication(
+        final medicationSupplyOptions = medicationSupplyProvider.getItemsForMedication(
           widget.schedule.molecule,
           widget.schedule.administrationRoute,
           widget.schedule.ester,
         );
-        final supplyItemDropdownItems = [
-          const DropdownMenuItem<SupplyItem?>(
+        final medicationSupplyDropdownItems = [
+          const DropdownMenuItem<MedicationSupply?>(
             value: null,
             child: Text('None'),
           ),
-          ...supplyItemOptions.map(
-            (item) => DropdownMenuItem<SupplyItem?>(
+          ...medicationSupplyOptions.map(
+            (item) => DropdownMenuItem<MedicationSupply?>(
               value: item,
               child: Text(item.name),
             ),
@@ -173,7 +173,7 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
           submitButtonLabel: 'Take intake',
           isFormValid: _isFormValid,
           saveChanges: (!isLoading && _isFormValid)
-              ? () => _takeIntake(medicationIntakeProvider, supplyItemProvider)
+              ? () => _takeIntake(medicationIntakeProvider, medicationSupplyProvider)
               : () {},
           fields: [
             FormDateField(
@@ -191,7 +191,7 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
               errorText: _takenDoseError,
               regexFormatter: r'[0-9.,]',
             ),
-            if (_selectedSupplyItem != null)
+            if (_selectedMedicationSupply != null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text.rich(
@@ -205,16 +205,16 @@ class _TakeMedicationPageState extends State<TakeMedicationPage> {
                       ),
                       TextSpan(
                         text:
-                            ' $_takenDose ${widget.schedule.molecule.unit} = ${_selectedSupplyItem!.getAmount(_takenDose)} ${_selectedSupplyItem!.administrationRoute.unit}',
+                            ' $_takenDose ${widget.schedule.molecule.unit} = ${_selectedMedicationSupply!.getAmount(_takenDose)} ${_selectedMedicationSupply!.administrationRoute.unit}',
                       ),
                     ],
                   ),
                 ),
               ),
-            FormDropdownField<SupplyItem?>(
-              value: _selectedSupplyItem,
-              items: supplyItemDropdownItems,
-              onChanged: _onSupplyItemChanged,
+            FormDropdownField<MedicationSupply?>(
+              value: _selectedMedicationSupply,
+              items: medicationSupplyDropdownItems,
+              onChanged: _onMedicationSupplyChanged,
               label: 'Supply item',
             ),
             if (_isInjection) ...[

@@ -12,7 +12,7 @@ enum SupplyType {
   miscellaneous
 }
 
-class SupplyItem {
+class MedicationSupply {
   final int id;
   final String name;
   final Decimal totalDose;
@@ -24,7 +24,7 @@ class SupplyItem {
   final AdministrationRoute administrationRoute;
   final Ester? ester;
 
-  SupplyItem({
+  MedicationSupply({
     int? id,
     required this.name,
     required this.totalDose,
@@ -37,8 +37,8 @@ class SupplyItem {
   })  : usedDose = usedDose ?? Decimal.zero,
         id = id ?? DateTime.now().millisecondsSinceEpoch;
 
-  factory SupplyItem.fromMap(Map<String, Object?> map) {
-    return SupplyItem(
+  factory MedicationSupply.fromMap(Map<String, Object?> map) {
+    return MedicationSupply(
       id: map['id'] as int?,
       name: map['name'] as String,
       totalDose: Decimal.parse(map['totalDose'] as String),
@@ -93,7 +93,7 @@ class SupplyItem {
 
   Decimal getDose(Decimal amount) => amount * concentration;
 
-  SupplyItem copyWith({
+  MedicationSupply copyWith({
     int? id,
     String? name,
     Decimal? totalDose,
@@ -105,7 +105,7 @@ class SupplyItem {
     Ester? ester,
     bool clearEster = false,
   }) {
-    return SupplyItem(
+    return MedicationSupply(
       id: id ?? this.id,
       name: name ?? this.name,
       totalDose: totalDose ?? this.totalDose,
@@ -157,7 +157,7 @@ class SupplyItem {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is SupplyItem && other.id == id;
+      identical(this, other) || other is MedicationSupply && other.id == id;
 
   @override
   int get hashCode => id.hashCode;

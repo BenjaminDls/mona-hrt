@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/ester.dart';
 import 'package:mona/data/model/molecule.dart';
-import 'package:mona/data/model/supply_item.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/services/preferences_service.dart';
 import 'package:mona/ui/widgets/dialogs.dart';
 import 'package:mona/ui/widgets/forms/form_dropdown_field.dart';
@@ -14,7 +14,7 @@ import 'package:mona/util/decimal_helpers.dart';
 import 'package:provider/provider.dart';
 
 class EditItemPage extends StatefulWidget {
-  final SupplyItem item;
+  final MedicationSupply item;
 
   EditItemPage({required this.item});
 
@@ -31,28 +31,28 @@ class _EditItemPageState extends State<EditItemPage> {
   late AdministrationRoute _administrationRoute;
   late Ester? _ester;
   late PreferencesService _preferencesService;
-  late SupplyItemProvider _supplyItemProvider;
+  late MedicationSupplyProvider _medicationSupplyProvider;
 
-  String? get _nameError => SupplyItem.validateName(_nameController.text);
+  String? get _nameError => MedicationSupply.validateName(_nameController.text);
 
   String? get _totalAmountError =>
-      SupplyItem.validateTotalAmount(_totalAmountController.text);
+      MedicationSupply.validateTotalAmount(_totalAmountController.text);
 
   String? get _usedAmountError {
     final validator =
-        SupplyItem.usedAmountValidator(_totalAmountController.text);
+        MedicationSupply.usedAmountValidator(_totalAmountController.text);
     return validator(_usedAmountController.text);
   }
 
   String? get _concentrationError =>
-      SupplyItem.validateConcentration(_concentrationController.text);
+      MedicationSupply.validateConcentration(_concentrationController.text);
 
-  String? get _moleculeError => SupplyItem.validateMolecule(_molecule);
+  String? get _moleculeError => MedicationSupply.validateMolecule(_molecule);
   String? get _administrationRouteError =>
-      SupplyItem.validateAdministrationRoute(_administrationRoute);
+      MedicationSupply.validateAdministrationRoute(_administrationRoute);
   String? get _esterError {
     final validator =
-        SupplyItem.esterValidator(_molecule, _administrationRoute);
+        MedicationSupply.esterValidator(_molecule, _administrationRoute);
     return validator(_ester);
   }
 
@@ -121,7 +121,7 @@ class _EditItemPageState extends State<EditItemPage> {
       ester: _ester,
       clearEster: !_useEsterField,
     );
-    _supplyItemProvider.updateItem(updatedItem);
+    _medicationSupplyProvider.updateItem(updatedItem);
 
     Navigator.of(context).pop();
   }
@@ -132,7 +132,7 @@ class _EditItemPageState extends State<EditItemPage> {
 
     if (confirmed == true) {
       if (!mounted) return;
-      _supplyItemProvider.deleteItem(widget.item);
+      _medicationSupplyProvider.deleteItem(widget.item);
       Navigator.of(context).pop();
     }
   }
@@ -152,8 +152,8 @@ class _EditItemPageState extends State<EditItemPage> {
     _molecule = widget.item.molecule;
     _administrationRoute = widget.item.administrationRoute;
     _ester = widget.item.ester;
-    _supplyItemProvider =
-        Provider.of<SupplyItemProvider>(context, listen: false);
+    _medicationSupplyProvider =
+        Provider.of<MedicationSupplyProvider>(context, listen: false);
     _preferencesService =
         Provider.of<PreferencesService>(context, listen: false);
   }

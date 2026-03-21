@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/administration_supply.dart';
-import 'package:mona/data/model/supply_item.dart';
 import 'package:mona/ui/views/supplies/administration_supply_form_page.dart';
-import 'package:mona/ui/views/supplies/edit_item_page.dart';
 
 class AdministrationSupplyCard extends StatelessWidget {
   final AdministrationSupply item;

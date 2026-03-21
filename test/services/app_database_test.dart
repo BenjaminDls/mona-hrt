@@ -30,13 +30,13 @@ void main() {
 
       expect(
         tableNames.containsAll(
-            {'supply_items', 'medication_intakes', 'medication_schedules'}),
+            {'medication_supplies', 'administration_supplies', 'medication_intakes', 'medication_schedules'}),
         true,
       );
     });
 
-    test('can insert and query supply_items', () async {
-      final id = await db.insert('supply_items', {
+    test('can insert and query medication_supplies', () async {
+      final id = await db.insert('medication_supplies', {
         'name': 'Test Item',
         'totalDose': '100',
         'usedDose': '0',
@@ -47,7 +47,7 @@ void main() {
       });
 
       final item = await db.query(
-        'supply_items',
+        'medication_supplies',
         where: 'id = ?',
         whereArgs: [id],
       );

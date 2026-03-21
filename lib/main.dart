@@ -14,7 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:mona/data/providers/administration_supply_provider.dart';
 import 'package:mona/data/providers/medication_intake_provider.dart';
 import 'package:mona/data/providers/medication_schedule_provider.dart';
-import 'package:mona/data/providers/supply_item_provider.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/services/preferences_service.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
@@ -31,7 +31,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SupplyItemProvider()),
+        ChangeNotifierProvider(create: (_) => MedicationSupplyProvider()),
         ChangeNotifierProvider(create: (_) => AdministrationSupplyProvider()),
         ChangeNotifierProvider(create: (_) => MedicationIntakeProvider()),
         ChangeNotifierProvider(create: (_) => MedicationScheduleProvider()),
