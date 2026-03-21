@@ -7,6 +7,11 @@ import 'package:mona/data/model/molecule.dart';
 import 'package:mona/util/decimal_helpers.dart';
 import 'package:mona/util/validators.dart';
 
+enum SupplyType {
+  molecule,
+  miscellaneous
+}
+
 class SupplyItem {
   final int id;
   final String name;
@@ -159,8 +164,8 @@ class SupplyItem {
 
   @override
   String toString() {
-    return "${molecule.name} "
-        "${ester != null ? "${ester!.name} " : ""}"
-        "$concentration ${molecule.unit}/${administrationRoute.unit}";
+    return "${molecule.name}"
+        "${ester != null ? "\n${ester!.name} " : ""}"
+        "\n$concentration ${molecule.unit}/${administrationRoute.unit}";
   }
 }

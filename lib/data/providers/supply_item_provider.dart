@@ -32,6 +32,7 @@ class SupplyItemProvider extends ChangeNotifier {
   Future<void> _init() async {
     _items = await repository.getAll();
     _isLoading = false;
+    print("count ${_items.length}");
     notifyListeners();
   }
 

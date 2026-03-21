@@ -45,7 +45,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -91,6 +91,14 @@ class AppDatabase {
       administrationRouteName TEXT NOT NULL,
       esterName TEXT,
       notificationTimes TEXT NOT NULL
+    )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE administration_supplies(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      remainingQuantity INTEGER NOT NULL
     )
     ''');
   }
@@ -197,6 +205,16 @@ class AppDatabase {
     if (oldVersion < 3) {
       await db.execute(
           "ALTER TABLE medication_schedules ADD COLUMN notificationTimes TEXT NOT NULL DEFAULT '[]'");
+    }
+
+    if (oldVersion < 4) {
+      await db.execute('''
+      CREATE TABLE administration_supplies (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        remainingQuantity INTEGER NOT NULL
+      )
+      ''');
     }
   }
 
