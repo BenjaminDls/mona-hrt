@@ -1,5 +1,5 @@
-import '../data/model/administration_supply.dart';
-import '../data/providers/administration_supply_provider.dart';
+import 'package:mona/data/model/administration_supply.dart';
+import 'package:mona/data/providers/administration_supply_provider.dart';
 
 class AdministrationSupplyManager {
   final AdministrationSupplyProvider _medicationSupplyProvider;

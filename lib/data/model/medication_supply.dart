@@ -7,11 +7,6 @@ import 'package:mona/data/model/molecule.dart';
 import 'package:mona/util/decimal_helpers.dart';
 import 'package:mona/util/validators.dart';
 
-enum SupplyType {
-  molecule,
-  miscellaneous
-}
-
 class MedicationSupply {
   final int id;
   final String name;

@@ -1,6 +1,6 @@
 import 'package:decimal/decimal.dart';
-import '../data/model/medication_supply.dart';
-import '../data/providers/medication_supply_provider.dart';
+import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/providers/medication_supply_provider.dart';
 
 class MedicationSupplyManager {
   final MedicationSupplyProvider _medicationSupplyProvider;

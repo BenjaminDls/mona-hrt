@@ -1,5 +1,5 @@
 
-import '../../util/validators.dart';
+import 'package:mona/util/validators.dart';
 
 class AdministrationSupply {
   final int id;

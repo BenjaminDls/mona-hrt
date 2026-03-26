@@ -1,10 +1,10 @@
 import 'package:decimal/decimal.dart';
 import 'package:mona/controllers/medication_supply_manager.dart';
+import 'package:mona/data/model/medication_intake.dart';
 import 'package:mona/data/model/medication_schedule.dart';
 import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/providers/medication_intake_provider.dart';
 import 'package:mona/data/providers/medication_supply_provider.dart';
-import '../data/model/medication_intake.dart';
-import '../data/providers/medication_intake_provider.dart';
 
 class MedicationIntakeManager {
   final MedicationIntakeProvider _medicationIntakeProvider;

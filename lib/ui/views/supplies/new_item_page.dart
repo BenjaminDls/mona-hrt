@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/ester.dart';
-import 'package:mona/data/model/molecule.dart';
 import 'package:mona/data/model/medication_supply.dart';
+import 'package:mona/data/model/molecule.dart';
 import 'package:mona/data/providers/medication_supply_provider.dart';
 import 'package:mona/services/preferences_service.dart';
+import 'package:mona/ui/constants/dimensions.dart';
+import 'package:mona/ui/widgets/forms/dismiss_keyboard_single_child_scroll_view.dart';
 import 'package:mona/ui/widgets/forms/form_dropdown_field.dart';
 import 'package:mona/ui/widgets/forms/form_spacer.dart';
 import 'package:mona/ui/widgets/forms/form_text_field.dart';
-import 'package:mona/ui/widgets/forms/model_form.dart';
 import 'package:mona/util/decimal_helpers.dart';
 import 'package:provider/provider.dart';
 
@@ -129,56 +130,88 @@ class _NewItemPageState extends State<NewItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ModelForm(
-      title: 'New item',
-      submitButtonLabel: 'Add',
-      isFormValid: _isFormValid,
-      saveChanges: _addItem,
-      fields: [
-        FormTextField(
-          controller: _nameController,
-          label: 'Name',
-          onChanged: _refresh,
-          inputType: TextInputType.text,
+    return SafeArea(
+      child: DismissKeyboardSingleChildScrollView(
+        padding: pagePadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Form
+            Column(
+              children: [
+                FormTextField(
+                  controller: _nameController,
+                  label: 'Name',
+                  onChanged: _refresh,
+                  inputType: TextInputType.text,
+                ),
+                FormSpacer(),
+                FormDropdownField<Molecule>(
+                  value: _molecule,
+                  items: _preferencesService.moleculeDropdownItems,
+                  onChanged: _onMoleculeChanged,
+                  label: 'Molecule',
+                ),
+                FormDropdownField<AdministrationRoute>(
+                  value: _administrationRoute,
+                  items: AdministrationRoute.menuItems,
+                  onChanged: _onAdministrationRouteChanged,
+                  label: 'Administration route',
+                ),
+                if (_useEsterField)
+                  FormDropdownField<Ester>(
+                    value: _ester,
+                    items: Ester.menuItems,
+                    onChanged: _onEsterChanged,
+                    label: 'Ester',
+                  ),
+                FormSpacer(),
+                FormTextField(
+                  controller: _totalAmountController,
+                  label: 'Total amount',
+                  onChanged: _refresh,
+                  inputType: TextInputType.numberWithOptions(decimal: true),
+                  suffixText: _administrationRoute?.unit,
+                  regexFormatter: r'[0-9.,]',
+                ),
+                FormTextField(
+                  controller: _concentrationController,
+                  label: 'Concentration',
+                  onChanged: _refresh,
+                  inputType: TextInputType.numberWithOptions(decimal: true),
+                  suffixText: '${_molecule?.unit}/${_administrationRoute?.unit}',
+                  regexFormatter: r'[0-9.,]',
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
+            // Bottom button
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: borderPadding,
+                    left: borderPadding,
+                    right: borderPadding,
+                    bottom: borderPadding + MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton.icon(
+                          icon: Icon(Icons.add),
+                          onPressed: _isFormValid ? _addItem : null,
+                          label: Text('Add'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
-        FormSpacer(),
-        FormDropdownField<Molecule>(
-          value: _molecule,
-          items: _preferencesService.moleculeDropdownItems,
-          onChanged: _onMoleculeChanged,
-          label: 'Molecule',
-        ),
-        FormDropdownField<AdministrationRoute>(
-          value: _administrationRoute,
-          items: AdministrationRoute.menuItems,
-          onChanged: _onAdministrationRouteChanged,
-          label: 'Administration route',
-        ),
-        if (_useEsterField)
-          FormDropdownField<Ester>(
-            value: _ester,
-            items: Ester.menuItems,
-            onChanged: _onEsterChanged,
-            label: 'Ester',
-          ),
-        FormSpacer(),
-        FormTextField(
-          controller: _totalAmountController,
-          label: 'Total amount',
-          onChanged: _refresh,
-          inputType: TextInputType.numberWithOptions(decimal: true),
-          suffixText: _administrationRoute?.unit,
-          regexFormatter: r'[0-9.,]',
-        ),
-        FormTextField(
-          controller: _concentrationController,
-          label: 'Concentration',
-          onChanged: _refresh,
-          inputType: TextInputType.numberWithOptions(decimal: true),
-          suffixText: '${_molecule?.unit}/${_administrationRoute?.unit}',
-          regexFormatter: r'[0-9.,]',
-        ),
-      ],
+      ),
     );
   }
 }

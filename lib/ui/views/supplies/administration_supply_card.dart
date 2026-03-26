@@ -47,11 +47,6 @@ class AdministrationSupplyCard extends StatelessWidget {
                     item.name,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  // text with description
-                  Text(
-                    '$item',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
                   Text(
                     '${item.remainingQuantity} remaining',
                     style: Theme.of(context).textTheme.bodyMedium,
