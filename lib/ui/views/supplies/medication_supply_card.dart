@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mona/data/model/administration_route.dart';
 import 'package:mona/data/model/medication_supply.dart';
-import 'package:mona/ui/views/supplies/edit_item_page.dart';
+import 'package:mona/ui/views/supplies/medication_supply_form_page.dart';
 
 class MedicationSupplyCard extends StatelessWidget {
   final MedicationSupply item;
@@ -17,7 +17,7 @@ class MedicationSupplyCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute<void>(
             fullscreenDialog: true,
-            builder: (context) => EditItemPage(item: item),
+            builder: (context) => MedicationSupplyFormPage(item),
           ));
         },
         child: Column(

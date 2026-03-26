@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mona/ui/views/supplies/administration_supply_form_page.dart';
-import 'package:mona/ui/views/supplies/new_item_page.dart';
+import 'package:mona/ui/views/supplies/medication_supply_form_page.dart';
 
 class PharmacyFormPage extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _PharmacyFormPageState extends State<PharmacyFormPage> with TickerProvider
         ),
         body: TabBarView(
           children: [
-            NewItemPage(),
+            MedicationSupplyFormPage(null),
             AdministrationSupplyFormPage(null)
           ]
         ),
